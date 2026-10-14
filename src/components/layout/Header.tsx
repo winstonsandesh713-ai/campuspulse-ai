@@ -67,13 +67,13 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
       'Academic Coverage %': `${s.scores.academicCoverage}%`,
       'Placement Readiness Score': s.scores.placementReadinessScore ?? 'Insufficient Data',
       'Placement Coverage %': `${s.scores.placementCoverage}%`,
-      'Matrix Quadrant': s.matrixQuadrant.replace(/_/g, ' '),
+      'Matrix Quadrant': s.matrixQuadrant?.replace(/_/g, ' ') ?? 'Unclassified',
       'Attendance %': s.scores.attendance !== null ? `${s.scores.attendance}%` : 'Unrecorded',
-      'Support Indicators Count': s.indicators.length,
+      'Support Indicators Count': s.indicators?.length ?? 0,
       'Recommended Action': s.recommendedAction,
     }));
 
-    exportToCSV(`campuspulse_${config.institutionName.toLowerCase().replace(/\s+/g, '_')}_export`, exportHeaders, exportRows);
+    exportToCSV(`campuspulse_${(config.institutionName || 'institution').toLowerCase().replace(/\s+/g, '_')}_export`, exportHeaders, exportRows);
   };
 
   return (
@@ -104,9 +104,9 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
       <div className="hidden xl:flex items-center gap-3 text-xs text-slate-500">
         <span className="font-mono tabular-nums">{students.length} students</span>
         <span aria-hidden="true">·</span>
-        <span>{config.departments.length} departments</span>
+        <span>{(config.departments || []).length} departments</span>
         <span aria-hidden="true">·</span>
-        <span>Scale: {config.gradingScale.replace('_', ' ')}</span>
+        <span>Scale: {(config.gradingScale || 'CGPA_10').replace('_', ' ')}</span>
       </div>
 
       {/* Zone 3: Primary Actions */}

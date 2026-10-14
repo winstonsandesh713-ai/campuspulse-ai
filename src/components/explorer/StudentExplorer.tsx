@@ -129,11 +129,11 @@ export const StudentExplorer: React.FC = () => {
       'Student Name': s.name,
       'Department': s.department,
       'Semester': s.semester,
-      'Academic Success Score': s.scores.academicSuccessScore ?? 'Insufficient Data',
-      'Placement Readiness Score': s.scores.placementReadinessScore ?? 'Insufficient Data',
-      'Data Coverage %': `${s.scores.overallCoverage}%`,
-      'Attendance %': s.scores.attendance !== null ? `${s.scores.attendance}%` : 'Unrecorded',
-      'Quadrant': s.matrixQuadrant.replace(/_/g, ' '),
+      'Academic Success Score': s.scores?.academicSuccessScore ?? 'Insufficient Data',
+      'Placement Readiness Score': s.scores?.placementReadinessScore ?? 'Insufficient Data',
+      'Data Coverage %': `${s.scores?.overallCoverage ?? 0}%`,
+      'Attendance %': s.scores?.attendance != null ? `${s.scores.attendance}%` : 'Unrecorded',
+      'Quadrant': s.matrixQuadrant?.replace(/_/g, ' ') ?? 'Unclassified',
       'Recommended Action': s.recommendedAction,
     }));
 
@@ -166,7 +166,7 @@ export const StudentExplorer: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              placeholder={`Search by Student Name or ${config.terminology.identifierLabel} (e.g. 22CS002)...`}
+              placeholder={`Search by Student Name or ${config.terminology?.identifierLabel || 'Roll No'} (e.g. 22CS002)...`}
               className="w-full text-xs pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>

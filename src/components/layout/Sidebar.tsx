@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   // Calculate quick average coverage
   const avgCoverage = Math.round(
-    students.reduce((acc, s) => acc + s.scores.overallCoverage, 0) / (students.length || 1)
+    students.reduce((acc, s) => acc + (s.scores?.overallCoverage ?? 0), 0) / (students.length || 1)
   );
 
   return (

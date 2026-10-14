@@ -30,21 +30,21 @@ export const InstitutionOverview: React.FC = () => {
   let totalCoverageSum = 0;
 
   students.forEach((s) => {
-    if (s.scores.academicSuccessScore !== null) {
+    if (s.scores?.academicSuccessScore != null) {
       validAcademicCount++;
       totalAcademicSum += s.scores.academicSuccessScore;
     }
-    if (s.scores.placementReadinessScore !== null) {
+    if (s.scores?.placementReadinessScore != null) {
       validPlacementCount++;
       totalPlacementSum += s.scores.placementReadinessScore;
     }
-    if (s.indicators.some((ind) => ind.type === 'ATTENDANCE_SUPPORT')) {
+    if (s.indicators?.some((ind) => ind.type === 'ATTENDANCE_SUPPORT')) {
       attendanceSupportCount++;
     }
-    if (s.matrixQuadrant === 'HIGH_ACADEMIC_LOW_PLACEMENT' || s.indicators.some((ind) => ind.type === 'PLACEMENT_GAP')) {
+    if (s.matrixQuadrant === 'HIGH_ACADEMIC_LOW_PLACEMENT' || s.indicators?.some((ind) => ind.type === 'PLACEMENT_GAP')) {
       placementGapCount++;
     }
-    totalCoverageSum += s.scores.overallCoverage;
+    totalCoverageSum += s.scores?.overallCoverage ?? 0;
   });
 
   const avgAcademicScore = validAcademicCount > 0 ? (totalAcademicSum / validAcademicCount).toFixed(1) : '—';
@@ -52,7 +52,7 @@ export const InstitutionOverview: React.FC = () => {
   const avgCohortCoverage = Math.round(totalCoverageSum / totalStudents);
 
   // Departmental breakdown
-  const deptStats = config.departments.map((dept) => {
+  const deptStats = (config.departments || []).map((dept) => {
     const deptStudents = students.filter((s) => s.department === dept);
     const count = deptStudents.length || 1;
 
@@ -64,18 +64,18 @@ export const InstitutionOverview: React.FC = () => {
     let covSum = 0;
 
     deptStudents.forEach((s) => {
-      if (s.scores.academicSuccessScore !== null) {
+      if (s.scores?.academicSuccessScore != null) {
         acadSum += s.scores.academicSuccessScore;
         acadCount++;
       }
-      if (s.scores.placementReadinessScore !== null) {
+      if (s.scores?.placementReadinessScore != null) {
         placeSum += s.scores.placementReadinessScore;
         placeCount++;
       }
-      if (s.indicators.some((i) => i.severity === 'HIGH' || i.type === 'ATTENDANCE_SUPPORT')) {
+      if (s.indicators?.some((i) => i.severity === 'HIGH' || i.type === 'ATTENDANCE_SUPPORT')) {
         flagCount++;
       }
-      covSum += s.scores.overallCoverage;
+      covSum += s.scores?.overallCoverage ?? 0;
     });
 
     return {

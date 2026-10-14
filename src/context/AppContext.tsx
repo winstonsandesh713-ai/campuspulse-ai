@@ -68,7 +68,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [config, setConfig] = useState<InstitutionConfig>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.CONFIG);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          return {
+            ...DEFAULT_CONFIG,
+            ...parsed,
+            gradingScale: parsed.gradingScale || DEFAULT_CONFIG.gradingScale,
+            institutionName: parsed.institutionName || DEFAULT_CONFIG.institutionName,
+            departments: Array.isArray(parsed.departments) && parsed.departments.length > 0 ? parsed.departments : DEFAULT_CONFIG.departments,
+            semesters: Array.isArray(parsed.semesters) && parsed.semesters.length > 0 ? parsed.semesters : DEFAULT_CONFIG.semesters,
+            weights: {
+              academic: {
+                ...DEFAULT_CONFIG.weights.academic,
+                ...(parsed.weights?.academic || {}),
+              },
+              placement: {
+                ...DEFAULT_CONFIG.weights.placement,
+                ...(parsed.weights?.placement || {}),
+              },
+            },
+            attendanceThreshold: typeof parsed.attendanceThreshold === 'number' ? parsed.attendanceThreshold : DEFAULT_CONFIG.attendanceThreshold,
+            academicScoreThreshold: typeof parsed.academicScoreThreshold === 'number' ? parsed.academicScoreThreshold : DEFAULT_CONFIG.academicScoreThreshold,
+            placementScoreThreshold: typeof parsed.placementScoreThreshold === 'number' ? parsed.placementScoreThreshold : DEFAULT_CONFIG.placementScoreThreshold,
+            matrixCutoff: {
+              ...DEFAULT_CONFIG.matrixCutoff,
+              ...(parsed.matrixCutoff || {}),
+            },
+            terminology: {
+              ...DEFAULT_CONFIG.terminology,
+              ...(parsed.terminology || {}),
+            },
+          };
+        }
+      }
     } catch {
       // LocalStorage access failure fallback
     }
@@ -81,7 +114,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const saved = localStorage.getItem(STORAGE_KEYS.STUDENTS);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const isValid = parsed.every((s) => s && s.scores && Array.isArray(s.indicators) && s.matrixQuadrant);
+          if (isValid) return parsed;
+        }
       }
     } catch {
       // fallback
@@ -95,7 +131,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const saved = localStorage.getItem(STORAGE_KEYS.PROFILES);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed.every((p) => p && p.id && p.mappings)) return parsed;
       }
     } catch {
       // fallback
@@ -109,7 +145,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const saved = localStorage.getItem(STORAGE_KEYS.INTERVENTIONS);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed.every((i) => i && i.id && i.status)) return parsed;
       }
     } catch {
       // fallback
