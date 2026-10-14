@@ -1,0 +1,6 @@
+{
+  "name": "CampusPulse AI — Adaptive Student Success Platform",
+  "description": "Enterprise student success and placement readiness platform that dynamically adapts to each institution's data schemas, terminology, grading scales, and advisory workflows.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
