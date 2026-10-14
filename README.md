@@ -133,3 +133,31 @@ $$\text{Composite Score} = \frac{\sum_{i \in \text{valid}} (\text{Weight}_i \tim
    - Verify that the intervention appears in the **Intervention Tracker**.
 4. **Test Reset Demo Data**:
    - Click **"Reset Demo Data"** at the bottom of the sidebar to cleanly reset all records to the original 300 fictional students.
+
+---
+
+## 7. Deploying to GitHub Pages (Fixing Blank Screen)
+
+When deploying a modern Vite React application to GitHub Pages, a blank white screen usually happens because:
+1. **GitHub Pages is serving the raw repository root instead of the compiled `dist/` directory**, causing the browser to attempt to load `/src/main.tsx` (which browsers cannot execute).
+2. **Missing trailing slash in GitHub Pages URL** (e.g., `https://user.github.io/repo` instead of `https://user.github.io/repo/`), causing relative asset paths (`./assets/*`) to 404.
+3. **Missing `.nojekyll` file**, causing Jekyll to ignore directories starting with special characters.
+
+### Solution A: Automatic GitHub Actions (Recommended)
+This repository includes a ready-to-use GitHub Actions workflow (`.github/workflows/deploy.yml`):
+1. Push your code to your GitHub repository `main` branch.
+2. In GitHub, go to your repository **Settings** > **Pages**.
+3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
+4. That's it! GitHub will automatically trigger the workflow, compile the application (`npm run build`), and publish the `dist/` bundle.
+
+### Solution B: Deploy via `npm run deploy` (Branch Deploy)
+1. In your terminal, run:
+   ```bash
+   npm run deploy
+   ```
+   This will automatically build the production bundle (`npm run build`) and push the `dist/` directory to the `gh-pages` branch.
+2. In your repository **Settings** > **Pages**:
+   - Set **Source** to **Deploy from a branch**.
+   - Select branch **gh-pages** and folder **/ (root)**.
+   - Click **Save**.
+

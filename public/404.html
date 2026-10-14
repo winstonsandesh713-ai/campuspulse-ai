@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusPulse AI — Redirecting...</title>
+    <script>
+      // Single Page Application redirect for GitHub Pages
+      // Stores requested path and redirects to base URL
+      sessionStorage.redirect = location.href;
+      var pathSegmentsToKeep = 1; // repository name in path for github.io/repo/
+      var l = window.location;
+      if (l.pathname.split('/').length > 2) {
+        var repo = l.pathname.split('/')[1];
+        window.location.replace(l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/' + repo + '/');
+      } else {
+        window.location.replace(l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/');
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to CampusPulse AI...</p>
+  </body>
+</html>
